@@ -21,7 +21,7 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-build": "build-storybook -c .storybook -o .out",
+    "storybook-build": "build-storybook -c .storybook -o docs",
     "galen-test": "galen test galen-tests/*.test"
   },
   "devDependencies": {
