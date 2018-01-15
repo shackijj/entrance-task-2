@@ -26,21 +26,13 @@
 
 = Body =
     DatePicker:
-        below Header 11px
+        below Header 10px
         inside screen 24px left
         width 197px
-
-    RoomGroupListWrapper:
-        below DatePicker 11px
-        inside screen 0px left
-        width 245px
     
-    RoomGroupList:
-        inside RoomGroupListWrapper 25px left, 23px top
-
     RoomEventList:
         below Header 0px
 
     Timeline:
         below Header 0px
-        height 46px
+        height 45px
