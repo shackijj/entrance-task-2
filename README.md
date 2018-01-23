@@ -24,7 +24,8 @@ npm install && cd server && npm install
 Запускаем в одном терминале сервер:
 ```
 cd server
-npm run dev
+npm run reset-db
+node index.js
 ```
 
 В другом терминале клиент:
