@@ -1,22 +1,33 @@
 import * as React from 'react';
-import User, { UserProps } from './User';
+import User from './User';
 import RoundButton from './RoundButton';
-import { Edit } from './GlyphIcon/GlyphIcon';
+import { Edit, Close } from './GlyphIcon/GlyphIcon';
 import * as moment from 'moment';
 import './EventTooltip.css';
 
-export interface Event {
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
+type User = {
+  login: string;
+  avatarUrl: string;
+};
+
+type Room = {
+  title: string;
+};
+
+type Event = {
   title: string;
   dateStart: string;
   dateEnd: string;
-  users: UserProps[];
-}
+  room: Room;
+  users: User[];
+  onCloseClick?: () => void;
+  onEditClick?: () => void;
+};
 
-interface EventTooltipProps extends Event {
-  room: { title: string };
-}
-
-const EventTooltip = ({title, room, dateStart, dateEnd, users}: EventTooltipProps) => {
+export const EventTooltip: React.SFC<Event> = ({title, room, dateStart, dateEnd, users, onCloseClick, onEditClick}) => {
   const momentStart = moment(dateStart);
   const momentEnd = moment(dateEnd);
   const date = momentStart.format('D MMMM');
@@ -43,7 +54,10 @@ const EventTooltip = ({title, room, dateStart, dateEnd, users}: EventTooltipProp
 
   return (
     <div className="EventTooltip">
-      <RoundButton classes={['EventTooltip-Button']} icon={<Edit/>}/>
+      <div className="EventTooltip-ButtonContainer">
+        <RoundButton onClick={onEditClick}classes={['EventTooltip-EditButton']} icon={<Edit/>}/>
+        <RoundButton onClick={onCloseClick} classes={['EventTooltip-CloseButton']} icon={<Close/>}/>
+      </div>
       <div className="EventTooltip-Title">{title}</div>
       <div className="EventTooltip-Info">
         {date}, {start}—{end} · {room.title}
@@ -56,4 +70,48 @@ const EventTooltip = ({title, room, dateStart, dateEnd, users}: EventTooltipProp
   );
 };
 
-export default EventTooltip;
+const TOOLTIP_QUERY = gql`
+  query EventQuery($id: ID!) {
+    event(id: $id) {
+      title
+      dateStart
+      dateEnd
+      room {
+        title
+      }
+      users {
+        login
+        avatarUrl
+      }
+    }
+  }
+`;
+
+type Response = {
+  event: Event;
+};
+
+type InputProps = {
+  id: string;
+  onCloseClick?: () => void;
+  onEditClick?: () => void;
+};
+
+export const withGraphQL = graphql<Response, InputProps>(TOOLTIP_QUERY, {
+  options: ({id}) => ({
+    variables: { id }
+  })
+});
+
+export default withGraphQL(({data, onCloseClick, onEditClick}) => {
+  if (data && data.event) {
+    return (
+      <EventTooltip
+        {...data.event}
+        onCloseClick={onCloseClick}
+        onEditClick={onEditClick}
+      />
+    );
+  }
+  return <div/>;
+});
