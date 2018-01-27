@@ -12,11 +12,13 @@ import './EventsDiagram.css';
 interface EventsDiagramProps {
   floors: Floor[];
   classes: string[];
-  dateCurrent?: Date;
+  date: string;
+  isDateCurrent: boolean;
 }
 
 type Tooltip = {
-  id: string;
+  eventId: string;
+  roomId: string;
   style: React.CSSProperties;
 };
 
@@ -37,15 +39,16 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
   }
 
   public componentWillReceiveProps(nextProps: EventsDiagramProps) {
-    if (this.props.dateCurrent !== nextProps.dateCurrent) {
+    if (this.props.date !== nextProps.date) {
       this._closeTooltip();
-    } 
+    }
   }
 
   public render() {
-    const {floors, classes, dateCurrent} = this.props;
+    const {floors, classes, date, isDateCurrent} = this.props;
     const { tooltip }  = this.state;
     const isScrollDisabled = !!tooltip;
+    const highlightedEventId = tooltip ? tooltip.eventId : undefined;
     return (
       <div
         className={classNames('EventsDiagram', {'EventsDiagram_noscroll': isScrollDisabled }, classes)}
@@ -56,7 +59,7 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
             classes={['EventsDiagram-Timeline']}
             hourStart={HOUR_START}
             hourEnd={HOUR_END}
-            dateCurrent={dateCurrent}
+            dateCurrent={new Date(date)}
           />
 
           <div
@@ -70,11 +73,14 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
                 {
                   floor.rooms.map((room, roomIdx) => (
                     <div className="EventDiagram-Room" key={roomIdx}>
-                      <Room {...room}/>
+                      <Room {...room} isHovered={!!(tooltip && room.id === tooltip.roomId)}/>
                       <RoomTimeline
-                        dateCurrent={dateCurrent}
+                        id={room.id}
+                        isDateCurrent={isDateCurrent}
+                        date={date}
                         hourStart={HOUR_START}
                         hourEnd={HOUR_END}
+                        highlightEventId={highlightedEventId}
                         onEventClick={this._onEventClick}
                         {...room}
                       />
@@ -90,7 +96,7 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
           ref={div => this._tooltip = div}
           style={tooltip && tooltip.style || {}}
         >
-          {tooltip && <EventTooltip {...tooltip} onCloseClick={this._closeTooltip}/>}
+          {tooltip && <EventTooltip id={tooltip.eventId} onCloseClick={this._closeTooltip}/>}
         </div>
       </div>
     );
@@ -101,7 +107,7 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
     this.setState(newState);
   }
 
-  private _onEventClick(id: string, divEvent: HTMLDivElement) {
+  private _onEventClick(eventId: string, roomId: string, divEvent: HTMLDivElement) {
     if (this._container && this._tooltip) {
       const er = divEvent.getBoundingClientRect();
 
@@ -124,7 +130,8 @@ class EventsDiagram extends React.Component<EventsDiagramProps, EventsDiagramSta
       }
       this.setState({
         tooltip: {
-          id,
+          eventId,
+          roomId,
           style: {
             top,
             left,
