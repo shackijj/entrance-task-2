@@ -10,9 +10,13 @@
 ======
 
 [Главная страница](https://shackijj.github.io/entrance-task-2/?selectedKind=MainPage&selectedStory=with%20lots%20of%20rooms&full=1&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
+
 [Главная страница с небольшим кол-вом комнат](https://shackijj.github.io/entrance-task-2/?selectedKind=MainPage&selectedStory=A%20few%20rooms&full=1&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
+
 [Главная страница с открытым календарем](https://shackijj.github.io/entrance-task-2/?selectedKind=MainPage&selectedStory=Widt%20datepicker%20opened&full=1&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
+
 [Главная страница с открытым модальным окном](https://shackijj.github.io/entrance-task-2/?selectedKind=MainPage&selectedStory=Widt%20datepicker%20opened&full=1&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
+
 [Редактирование встречи](https://shackijj.github.io/entrance-task-2/?selectedKind=EditEventPage&selectedStory=default&full=1&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
 
 Задание сразу было сделано на React, чтобы избежать повторного форматирования кода при перенесении верстки в приложение. 
@@ -23,4 +27,4 @@
 Почему React?
 Я выбрал React т.к. имею опыт работы с данной технологией.
 
-Верстка некоторых блоков значительно изменилась в процессе работы над заданием 3 (https://github.com/shackijj/entrance-task-2).
+Верстка некоторых блоков значительно изменилась в процессе работы над заданием 3 (https://github.com/shackijj/entrance-task-3).
